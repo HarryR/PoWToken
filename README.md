@@ -1,8 +1,8 @@
 # Proof of Work Token (ALPHA)
 
-These ethereum smart-contracts allow you to mine 'proof of work' with different algorithms, then submit the result in return for tokens with a value representative of their difficulty.
+These ethereum smart-contracts allow you to mine a cryptographic proof of work using different algorithms, then submit the result in return for tokens with a value representative of their difficulty.
 
-The tokens are ERC20 and ERC223 compatible and can be traded openly on all compatible exchanges, different algorithms take different amounts of effort to produce tokens of the same difficulty, the current implementations are:
+The tokens are ERC20 and ERC223 compatible and can be traded openly on all compatible exchanges, different algorithms require differing amounts of effort to produce tokens of the same difficulty, the current implementations are:
 
  * SHA3 (Ethereum)
  * SHA256
@@ -31,21 +31,25 @@ This repository provides the reference implementations and the authoritative sma
 Hashing a random 32 byte value and the owners public key represents the difficulty/value of this type of coin, it can only be spent by the `owner`.
 
 ```
-nonce = random(32)
-proof = hash(owner ++ nonce)
+nonce = random_bytes(32)
+proof = hash(owner + nonce)
 value = pow(2, difficulty(proof))
 ```
 
-### Elliptic Curve based Proof of Work
+Two implementations are available: `SHA256` and `SHA3`.
+
+### Key-Pair based Proof of Work
 
 Hashing the public key of a random key pair represents the difficulty/value of this type of coin. It can be mined and traded offline as long as you hold the private key, you must hold the private key to convert this coin into public PoW Tokens.
 
 ```
 seckey, pubkey = random_keypair()
-proof = sha3(pubkey)
+proof = hash(pubkey)
 value = pow(2, difficulty(proof))
-authority = sign(seckey, sha3(owner ++ pubkey))
+authority = sign(seckey, hash(owner + pubkey))
 ```
+
+The reference implementation uses `secp256k1` and `sha3`.
 
 # Security Audit
 
