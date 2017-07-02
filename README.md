@@ -43,7 +43,7 @@ Two variants are available: `SHA256` and `SHA3`.
 The interface for registering a hash based proof of work token is:
 
 ```
-function mine( bytes32 nonce );
+function mine( bytes32 nonce )
 ```
 
 ### Key-Pair based Proof of Work
@@ -54,7 +54,7 @@ Hashing the public key of a random key pair represents the difficulty/value of t
 seckey, pubkey = random_keypair()
 proof = hash(pubkey)
 value = pow(2, difficulty(proof))
-authority = sign(seckey, hash(owner + pubkey))
+v, r, s = sign(seckey, hash(owner + pubkey))
 ```
 
 The Ethereum implementation uses `secp256k1` and `sha3`.
