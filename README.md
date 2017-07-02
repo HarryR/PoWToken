@@ -22,6 +22,8 @@ def difficulty(data):
     return bitcount
 ```
 
+For example, a proof of work with difficulty 8 is at least twice as hard to find as one with difficulty 7.
+
 ## Reference Implementation
 
 This repository provides the reference implementations and the authoritative smart-contract source code.
@@ -36,11 +38,17 @@ proof = hash(owner + nonce)
 value = pow(2, difficulty(proof))
 ```
 
-Two implementations are available: `SHA256` and `SHA3`.
+Two variants are available: `SHA256` and `SHA3`.
+
+The interface for registering a hash based proof of work token is:
+
+```
+function mine( bytes32 nonce );
+```
 
 ### Key-Pair based Proof of Work
 
-Hashing the public key of a random key pair represents the difficulty/value of this type of coin. It can be mined and traded offline as long as you hold the private key, you must hold the private key to convert this coin into public PoW Tokens.
+Hashing the public key of a random key pair represents the difficulty/value of this type of coin. It can be mined and traded offline as long as you hold the private key but there is no way other than trust to prevent a double-spend, the private key holder must sign the new owner's public key to convert it into Ethereum PoW Tokens.
 
 ```
 seckey, pubkey = random_keypair()
@@ -49,8 +57,14 @@ value = pow(2, difficulty(proof))
 authority = sign(seckey, hash(owner + pubkey))
 ```
 
-The reference implementation uses `secp256k1` and `sha3`.
+The Ethereum implementation uses `secp256k1` and `sha3`.
 
-# Security Audit
+The interface for registering a key-pair based proof of work token is:
+
+```
+function mine (address pubkey, uint8 v, bytes32 r, bytes32 s)
+```
+
+## Security Audit
 
 This software is written by a security auditor, feel free to submit a GitHub Issue, or hack it and reap the rewards (if you can): PoC or GTFO.
